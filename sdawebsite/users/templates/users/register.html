@@ -2,19 +2,18 @@
 {% block content %}
         <h1>About Page</h1>
         <div class="content-section">
-            <form class="" action="index.html" method="POST">
+            <form method="POST">
                 {% csrf_token %}
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-4">Join today</legend>
                     {{ form.as_p }}
                 </fieldset>
                 <div class="form-group">
-                    <button class="btn btn-outline-info" type="submit" name="button">Sign Up</button>
-
+                    <button class="btn btn-outline-info" type="submit">Sign Up</button>
                 </div>
             </form>
             <div class="border-top pt-3">
-                <small class="text-muted">Alredy have an account? <a class="ml-2" href="#">Sign In</a></small>
+                <small class="text-muted">Alredy have an account? <a class="ml-2" href="">Sign In</a></small>
 
             </div>
         </div>
