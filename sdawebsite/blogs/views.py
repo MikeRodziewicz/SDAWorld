@@ -5,7 +5,7 @@ from django.views.generic import (
     CreateView,
     DeleteView
 )
-from .models import Post
+from .models import Post, Comment
 
 
 def home(request):
