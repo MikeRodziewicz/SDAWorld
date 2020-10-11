@@ -19,8 +19,8 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    post_id = models.ForeignKey('blogs.Post', on_delete=models.CASCADE, related_name='comment')
-    comment = models.TextField()
+    post = models.ForeignKey('blogs.Post', on_delete=models.CASCADE, related_name='comments')
+    words = models.TextField()
     signature = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created = models.DateTimeField(default=timezone.now)
 
