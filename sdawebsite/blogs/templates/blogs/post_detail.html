@@ -20,8 +20,12 @@
 
             <div class="article-content">
               {% for comment in object.comments.all %}
+              <div class="article-metadata">
+                    <p>{{comment.title}}</p>
                     <p>{{comment.words}}</p>
                     <p>{{comment.signature}}</p>
+                    <p>{{comment.created}}</p>
+                </div>
 
 
               {% endfor %}

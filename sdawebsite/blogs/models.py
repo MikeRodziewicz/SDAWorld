@@ -20,6 +20,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey('blogs.Post', on_delete=models.CASCADE, related_name='comments')
+    comment_title = models.CharField(max_length=100, default='Title')
     words = models.TextField()
     signature = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created = models.DateTimeField(default=timezone.now)
