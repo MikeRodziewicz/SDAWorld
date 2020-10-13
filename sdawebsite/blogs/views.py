@@ -30,13 +30,13 @@ class PostListView(ListView):
 class UserPostListView(ListView):
     """docstring for PostListView."""
     model = Post
-    template_name = 'blogs/user_post.html'
+    template_name = 'blogs/user_posts.html'
     context_object_name = 'posts'
     paginate_by = 5
 
     def qet_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
-        return Post.objects.filter(author=user).order_by('-date_posted')
+        return super().objects.filter(author=user)
 
 
 class PostDetailView(DetailView):
