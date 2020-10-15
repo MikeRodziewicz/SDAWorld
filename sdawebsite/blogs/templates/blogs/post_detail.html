@@ -19,6 +19,8 @@
             <p class="article-content">{{ object.content }}</p>
 
             <div class="article-content">
+                <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+
               {% for comment in object.comments.all %}
               <div class="article-metadata">
                     <p>{{comment.title}}</p>
@@ -26,7 +28,8 @@
                     <p>{{comment.signature}}</p>
                     <p>{{comment.created}}</p>
                 </div>
-
+                {% empty %}
+                    <p>No comments here yet :(</p>
 
               {% endfor %}
             </div>

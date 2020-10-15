@@ -87,12 +87,18 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 @login_required
-def make_comment(request):
+def add_comment_to_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    print(post)
+    print(Post.pk)
+    print(post.pk)
     if request.method == 'POST':
-        c_form = CommentForm(request.POST, instance=request.user)
+        c_form = CommentForm(request.POST)
         if c_form.is_valid():
-            c_form.save()
-            return redirect('post-detail')
+            comment = c_form.save(commit=False)
+            comment.post = post
+            comment.save()
+            return redirect('post-detail', pk=post.pk)
     else:
         c_form = CommentForm(request.POST, instance=request.user)
 
@@ -100,4 +106,4 @@ def make_comment(request):
         'c_form': c_form
     }
 
-    return render(request, 'blogs/comment.html', context)
+    return render(request, 'blogs/add_comment_to_post.html', context)

@@ -24,6 +24,11 @@ class Comment(models.Model):
     words = models.TextField()
     signature = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created = models.DateTimeField(default=timezone.now)
+    approved_comment = models.BooleanField(default=False)
+
+    def approve(self):
+        self.approved_comment = True
+        self.save()
 
     def __str__(self):
-        return self.comment
+        return self.words
