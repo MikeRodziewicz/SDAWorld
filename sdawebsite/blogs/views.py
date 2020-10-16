@@ -94,7 +94,12 @@ def add_comment_to_post(request, pk):
     print(post.pk)
     if request.method == 'POST':
         c_form = CommentForm(request.POST)
-        if c_form.is_valid():
+        if c_form.is_valid() and request.user.is_authenticated():
+            comment = c_form.save(commit=False)
+            comment.post = post
+            comment.save()
+            return redirect('post-detail', pk=post.pk)
+        elif c_form.is_valid():
             comment = c_form.save(commit=False)
             comment.post = post
             comment.save()
@@ -107,3 +112,25 @@ def add_comment_to_post(request, pk):
     }
 
     return render(request, 'blogs/add_comment_to_post.html', context)
+
+
+class CommentUpdateView(UserPassesTestMixin, DeleteView):
+    model = Comment
+    success_url = '/'
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
+
+
+class CommentDeleteView(UserPassesTestMixin, DeleteView):
+    model = Comment
+    success_url = '/'
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
