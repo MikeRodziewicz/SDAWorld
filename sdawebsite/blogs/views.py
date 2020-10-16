@@ -100,7 +100,7 @@ def add_comment_to_post(request, pk):
             comment.save()
             return redirect('post-detail', pk=post.pk)
     else:
-        c_form = CommentForm(request.POST, instance=request.user)
+        c_form = CommentForm(request.POST)
 
     context = {
         'c_form': c_form
