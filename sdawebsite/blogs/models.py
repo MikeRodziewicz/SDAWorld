@@ -9,6 +9,7 @@ class Post(models.Model):
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    type = models.CharField(max_length=120, default='misc')
     likes_count = models.IntegerField(default=0)
 
     def __str__(self):
@@ -32,3 +33,13 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.words
+
+
+class Category(models.Model):
+    post_cat = models.CharField(max_length=120, default='misc')
+
+    def __str__(self):
+        return self.post_cat
+
+    def get_absolute_url(self):
+        return reverse('blogs-home')
