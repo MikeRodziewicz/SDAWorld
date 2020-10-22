@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django import forms
 from django.contrib.auth.decorators import login_required
 from .forms import CommentForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -10,7 +11,7 @@ from django.views.generic import (
     DeleteView,
     UpdateView
 )
-from .models import Post, Comment
+from .models import Post, Comment, Category
 
 
 def home(request):
@@ -45,10 +46,21 @@ class PostDetailView(DetailView):
     model = Post
 
 
+# selection_query = Category.objects.all().values_list('post_cat', 'post_cat')
+selection = ['tuna', 'chicken']
+
+# for item in selection_query:
+#     selection.append(item)
+
+
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'content']
+    fields = ['title', 'content', 'type']
 # this is actually complicated - need further explanation
+
+    widgets = {
+        'type': forms.Select(choices=selection, attrs={'class': 'form-control'})
+    }
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -94,12 +106,7 @@ def add_comment_to_post(request, pk):
     print(post.pk)
     if request.method == 'POST':
         c_form = CommentForm(request.POST)
-        if c_form.is_valid() and request.user.is_authenticated():
-            comment = c_form.save(commit=False)
-            comment.post = post
-            comment.save()
-            return redirect('post-detail', pk=post.pk)
-        elif c_form.is_valid():
+        if c_form.is_valid():
             comment = c_form.save(commit=False)
             comment.post = post
             comment.save()
@@ -112,25 +119,3 @@ def add_comment_to_post(request, pk):
     }
 
     return render(request, 'blogs/add_comment_to_post.html', context)
-
-
-class CommentUpdateView(UserPassesTestMixin, DeleteView):
-    model = Comment
-    success_url = '/'
-
-    def test_func(self):
-        post = self.get_object()
-        if self.request.user == post.author:
-            return True
-        return False
-
-
-class CommentDeleteView(UserPassesTestMixin, DeleteView):
-    model = Comment
-    success_url = '/'
-
-    def test_func(self):
-        post = self.get_object()
-        if self.request.user == post.author:
-            return True
-        return False
